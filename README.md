@@ -36,4 +36,4 @@ HR department gave me to files:
 I checked data for uniquess, formats and outliers through Powerquery.
 Survey dataset didn't have a unique key column. I created new column "AnswerKey" whitch combined "Question Round" and "Answer ID".
 In HR dataset, I removed columns with personal data: "First Name", "Last Name" and "Email". Also removed "Employee Status" as the data in that column was not up to date according to the HR department.
-Column "Salary" was changed to Decimal Number formar. 
+Column "Salary" was changed to Decimal Number format. 
