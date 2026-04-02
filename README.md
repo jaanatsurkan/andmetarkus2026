@@ -22,7 +22,7 @@ Fixes made:
 # Employee Report
 
 ## Problem Statement
-HR department wants an overview of active and left lemployee over time and results of the satisfaction survey.  
+HR department wants an overview of active and left employee over time and results of the satisfaction survey.  
 
 ## Plan
 I will create a Power BI report to give this overview.  
