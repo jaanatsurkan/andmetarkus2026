@@ -1,0 +1,176 @@
+-- 1. VALIMINE
+
+-- 1.1. Valime esimesed 10 rida tabeliga tutvumiseks - LIMIT
+SELECT *
+FROM SalesTable
+LIMIT 10;
+
+-- 1.2. Valime konkreetsed tulbad - tulba nimed eraldada komadega
+SELECT ProductID, Quantity
+FROM SalesTable;
+
+-- 1.3. Valime unikaalsed väärtused - DISTINCT käsk
+SELECT DISTINCT ProductID
+FROM SalesTable;
+
+-- 2. FILTREERIMINE - kindlate ridade valimine
+SELECT *
+FROM SalesTable
+WHERE ProductID = 'P001';
+
+
+-- 2.1. FILTREERIMINE - KINDEL VÄÄRTUS: Valime kindla toote müügid - WHERE käsk tekstilise välja puhul
+SELECT *
+FROM SalesTable
+WHERE ProductID != 'P001' ;
+
+
+-- 2.2. FILTREERIMINE - VÄLISTAMINE: Välistame kindla toote müügid - WHERE käsk tekstilise välja puhul
+SELECT *
+FROM SalesTable
+WHERE ProductID = 'POO1';
+
+-- 2.3. FILTREERIMINE - NUMBRLISE VÄÄRTUSE VÕRDLEMINE: Valime ainult müügid, kus kogus on suurem viiest - WHERE käsk numbrilise välja puhul (teised võrdlused: <, <= , >=)
+SELECT *
+FROM SalesTable
+WHERE Quantity > 5;
+
+-- 2.4. FILTREERIMINE MITME TUNNUSE ALUSEL: Valime kindla toote müügid kindlale kliendile - WHERE ning AND
+SELECT *
+FROM SalesTable
+WHERE ProductID = 'P001' AND CustomerID LIKE 'C002';
+
+-- 2.5. FILTREERIMINE MITME TUNNUSE ALUSEL: Valime kindla toote müügid VÕI kindla kliendi müügid - WHERE ning OR
+SELECT *
+FROM SalesTable
+WHERE ProductID = 'P002' OR CustomerID = 'C003';
+ 
+-- 2.6. FILTREERIMINE VAHEMIKU ALUSEL: Valime ainult müügid, kus kogus on 5 ja 8 vahepeal - BETWEEN
+SELECT *
+FROM SalesTable
+WHERE Quantity BETWEEN 5 AND 8; -- Includes 5 and 8
+
+-- 2.7. FILTREERIMINE - VALIME MITU VÄÄRTUST: Valime mitme kindla toote müügid - IN
+SELECT *
+FROM SalesTable
+WHERE ProductID IN ('P004', 'P005');
+
+-- 2.8. FILTREERIMINE OSALISE TEKSTI alusel: Valime kõik tooted, mille ID algab 'P00' - LIKE ja %
+SELECT *
+FROM SalesTable
+WHERE ProductID LIKE 'P00%';
+
+-- 2.9. FILTREERIMINE - TÕSTUTUNDLIKKUSE EEMALDAMINE: Valime kõik tooted, mille ID algab 'P00' või 'p000' - LOWER või UPPER käsk
+SELECT *
+FROM SalesTable
+WHERE UPPER(ProductID) LIKE 'P00%';
+
+-- 2.10. FILTREERIMINE - MITME TINGIMUSE KOMBINEERIMINE: Valime müügid, mis esimese toote puhul on kogusega 2 ja teise toote puhul on kogusega 5 - SULGUDE KASUTAMINE
+SELECT *
+FROM SalesTable
+WHERE ProductID = 'P001' AND Quantity = 2 OR ProductID = 'P002' AND Quantity = 5;
+
+-- 3. SORTEERIMINE: Sorteerime suurema toote hinnaga müügid ette poole - ORDER BY
+SELECT *
+FROM SalesTable
+ORDER BY UnitPrice DESC;
+
+-- 4. ALIAS - TULBALE UUS NIMI VÄLJUNDIS: Date tulbast SalesDate tulp väljundis - AS
+SELECT Date AS SalesDate
+FROM SalesTable;
+
+/*
+5. Mitmerealise kommentaari lisamine:
+kui tahad mitu rida kommentaari kirjutada, siis alusta / ja * ning lõpeta * ja /
+*/
+
+-- 6. ARVUTUSED - võimalik teha aritmeetilisi tehteid (+, -, /, *) tulpade loomiseks, filtreerimiseks ja sorteerimiseks
+-- 6.1. ARVUTUS - Leia müügisummad, kus müügisumma on suurem kui 500 ja järjesta müügisumma alusel kasvavalt
+SELECT ROUND(Quantity * UnitPrice * (1-Discount), 2) AS SaleSum
+FROM SalesTable
+WHERE SaleSum > 500
+ORDER BY SaleSum ASC
+;
+
+-- 7. AGREGEERIMINE
+
+-- 7.1. LOENDAMINE: Kui palju müügitehinguid on tehtud? - COUNT
+SELECT COUNT(SaleID)
+FROM SalesTable;
+
+
+
+-- 7.2. UNIKAALSETE VÄÄRTUSTE LOENDAMINE: Kui palju eri tooteid on müüdud? - COUNT (DISTINCT)
+SELECT COUNT(DISTINCT ProductID)
+FROM SalesTable;
+
+
+-- 7.3. SUMMERIMINE: Kui palju on tooteid müüdud? - SUM
+SELECT SUM(Quantity)
+FROM SalesTable;
+
+-- 7.4. KESKMINE, MIINIMUM, MAKSIMUM: Mis on toodete keskmine, minimaalne ja maksimaalne hind? - AVG, MIN, MAX
+SELECT AVG(UnitPrice) AS AverageUnitPrice, MIN(UnitPrice) AS MinimumUnitPrice, MAX(UnitPrice) AS MaximumUnitPrice
+FROM SalesTable;
+
+-- 7.5. GRUPEERIMINE: Mis on toodete keskmine, minimaalne ja maksimaalne hind toodete kaupa? - GROUP BY
+SELECT ProductID,
+AVG(UnitPrice) AS AverageUnitPrice, MIN(UnitPrice) AS MinimumUnitPrice, MAX(UnitPrice) AS MaximumUnitPrice
+FROM SalesTable
+GROUP BY ProductID;
+
+-- 7.6. AGREGEERTITUD VÄÄRTUSE ALUSEL FILTREERIMINE: Näita ainult tooteid, mille keskmine hind on suurem kui 54.50. - HAVING
+SELECT ProductID,
+ROUND(AVG(UnitPrice), 2) AS AverageUnitPrice, MIN(UnitPrice) AS MinimumUnitPrice, MAX(UnitPrice) AS MaximumUnitPrice
+FROM SalesTable
+GROUP BY ProductID
+HAVING AverageUnitPrice > 54.50;
+
+-- 8. TÜHI VÄÄRTUS: Näita tooteridu, kus kogus on või ei ole tühi väärtus - IS NULL või IS NOT NULL
+SELECT *
+FROM SalesTable
+Where Quantity IS NOT NULL;
+
+-- 9. VÄÄRTUSE MUUTMINE: Grupeeri tooted kategooriatesse - CASE WHEN
+SELECT ProductID,
+CASE WHEN ProductID IN ('P001', 'P002', 'P003') THEN 'Category 1'
+ WHEN ProductID IN ('P004', 'P005', 'P006') THEN 'Category 2'
+END AS ProductCategory
+FROM SalesTable;
+
+-- AGREGEERIMINE HARJUTUSED
+
+-- 1. LOENDAMINE: Kui palju müügiesindajaid on müügiesindaja tabelis?
+SELECT COUNT(SalesRepID)
+FROM SalesRepTable;
+
+
+-- 2. UNIKAALSETE VÄÄRTUSTE LOENDAMINE: Kui palju eri müügiesindajaid on müükide tabelis? 
+SELECT COUNT(DISTINCT SalesRepID)
+FROM SalesTable;
+
+-- 3. KESKMINE, MIINIMUM, MAKSIMUM: Mis on toodete keskmine, minimaalne ja maksimaalne kogus?
+SELECT Round(AVG(Quantity), 0) AS AverageQuantity, MIN(Quantity) AS MinimumQuantity, MAX(Quantity) AS MaximumQuantity
+FROM SalesTable;
+
+-- 4. GRUPEERIMINE: Mis on toodete keskmine, minimaalne ja maksimaalne kogus toodete kaupa?
+SELECT ProductID,
+ROUND(AVG(Quantity), 0) AS AverageQuantity, MIN(Quantity) AS MinimumQuantity, MAX(Quantity) AS MaximumQuantity
+FROM SalesTable
+GROUP BY ProductID;
+
+-- 5. AGREGEERTITUD VÄÄRTUSE ALUSEL FILTREERIMINE: Näita ainult tooteid, mille keskmine müüdud kogus on suurem kui 5. 
+SELECT ProductID
+FROM SalesTable
+GROUP BY ProductID
+HAVING AVG(Quantity) > 5;
+
+
+-- 6. Grupeeri müügiesindajad tiimidesse.
+SELECT DISTINCT(SalesRepID),
+CASE WHEN SalesRepID IN ('SR01', 'SR02') THEN 'Team 1'
+ WHEN SalesRepID IN ('SR03') THEN 'Team 2' ELSE 'Error'
+END AS SalesRepCategory
+FROM SalesTable;
+
+
