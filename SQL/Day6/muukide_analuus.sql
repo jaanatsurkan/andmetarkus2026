@@ -72,7 +72,7 @@ ORDER BY sale_category;
 -- Alternatiivne lahendus ajutise päringu abil.
 WITH sales_per_category AS (
 SELECT *,
-CASE  WHEN sale_sum < 250 THEN 'Small_Sale'
+CASE WHEN sale_sum < 250 THEN 'Small_Sale'
     WHEN sale_sum BETWEEN 250 AND 500 THEN 'Medium_Sale'
     WHEN sale_sum > 500 THEN 'Large_Sale'
    ELSE 'ERROR' END AS sale_category_new
