@@ -1,4 +1,6 @@
-Siin on andmetarkuse materjalid.
+# Data Analytics Portfolio
+This repository includes projects from my Data Analytics studies. Each project shows the full process—from cleaning and preparing data to analyzing it and creating insights using Power BI.
+
 
 # Sales Report
 You can find the Power BI file for Sales Report: https://github.com/jaanatsurkan/andmetarkus2026/blob/main/SalesReport.pbix
